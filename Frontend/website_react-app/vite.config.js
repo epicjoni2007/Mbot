@@ -11,7 +11,7 @@ export default defineConfig({
       },
       manifest: {
         name: 'MBot-Frontend',
-        short_name: 'mbot_frontend',
+        short_name: 'MBot Steuerung',
         description: 'Frontend für die Steuerung eines MBots',
         theme_color: '#2c5364',
         background_color: '#2c5364',
@@ -19,7 +19,7 @@ export default defineConfig({
         start_url: '/',
         icons: [
           {
-            src: '/app_icon.png',
+            src: '/main-icon.png',
             sizes: '512x512',
             type: 'image/png'
           }

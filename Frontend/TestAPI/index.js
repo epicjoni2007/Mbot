@@ -2,6 +2,8 @@ const express = require('express')
 const app = express()
 const port = 3000
 
+app.use(express.json())
+
 app.get('/test', (req, res) => {
   res.send('It works!')
 })
@@ -30,6 +32,11 @@ app.get('/ip', (req, res) => {
     ipAdresse: randIP,
     name: randName
   }))
+})
+
+app.post('/sendData', (req, res) => {
+  console.log('Request Body:', req.body)
+  res.send('Logged Data')
 })
 
 app.listen(port, () => {

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import './App.css'
 import Layout from './components/Layout'
 import Home from './components/Home'
@@ -13,11 +13,12 @@ function App() {
       <BrowserRouter>
           <Routes>
             <Route path="/" element={<Layout />}>
-                <Route index element={<Home />} />
-                <Route path="youtube" element={<Joystick />} />
-                <Route path="orfnews" element={<RouteDefine />} />
-                <Route path="contact" element={<Karte />} />
-                <Route path="*" element={<NoPage />} />
+              <Route index element={<Navigate to="/home" replace />} />
+              <Route path="home" element={<Home />} />
+              <Route path="joystick" element={<Joystick />} />
+              <Route path="routedefine" element={<RouteDefine />} />
+              <Route path="karte" element={<Karte />} />
+              <Route path="*" element={<NoPage />} />
             </Route>
           </Routes>
         </BrowserRouter>

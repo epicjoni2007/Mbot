@@ -11,7 +11,7 @@ app.get('/test', (req, res) => {
 app.get('/sensor', (req, res) => {
   res.send(JSON.stringify({
     wandEntfernung: ((Math.random() * (2 - 1) + 1).toFixed(2)),
-    lichtLevel: ((Math.random() * (10 - 1) + 1).toFixed(2))
+    geschwindigkeit: ((Math.random() * (10 - 1) + 1).toFixed(2))
   }))
 })
 

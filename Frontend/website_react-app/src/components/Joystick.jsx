@@ -1,7 +1,7 @@
 const Joystick = () => {
     return(
         <div id="joystick">
-
+            JOYSTICK
         </div>
     )
 }

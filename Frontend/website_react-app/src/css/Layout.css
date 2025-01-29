@@ -2,28 +2,171 @@
     background-color: rgba(28, 40, 51, 1);
     height: 10vh;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    padding: 0 0 0 1vw;
+    padding: 0 30px 0 30px;
 }
 
 #sensorwerte {
-    background-color: rgba(152, 162, 173, 1);
-    height: 6vh;
+    background-color: #98A2AD;
+    height: 5vh;
+    font-size: 3vh;
+    font-family: ui-sans-serif, -apple-system, system-ui, Segoe UI, Helvetica, Apple Color Emoji, Arial, sans-serif, Segoe UI Emoji, Segoe UI Symbol;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
 }
 
-.burger-menu {
-    width: 1.75vw;
-    height: 3.5vh;
+@media (orientation: portrait) {
+    #sensorwerte {
+        font-size: 1vh;
+    }
+}
+
+#sensorwerte i {
+    margin-left: 2.5px;
+}
+
+#failedconnect {
+    color: red;
+}
+
+#successconnect {
+    color: greenyellow;
+}
+
+#layouttext {
+    color: #00D1FF;
+    font-size: 4vh;
+    font-family: ui-sans-serif, -apple-system, system-ui, Segoe UI, Helvetica, Apple Color Emoji, Arial, sans-serif, Segoe UI Emoji, Segoe UI Symbol;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+@media (orientation: portrait) {
+    #layouttext {
+        font-size: 3vh;
+    }
+}
+
+#layoutsettings {
+    color: #98A2AD;
+}
+
+.settingsicon {
+    font-size: 200%;
+}
+
+#burger-menu {
+    width: 40px;
+    height: 30px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-around;
     cursor: pointer;
-    }
+}
 
 .line {
-    background-color: rgba(152, 162, 173, 1);
-    height: 0.4vh;
-    border-radius: 0.2vh;
+    background-color: #98A2AD;
+    height: 4px;
+    border-radius: 2px;
     width: 100%;
     transition: all 0.3s ease-in-out;
+}
+
+@media (orientation: landscape) {
+    .burger-menu {
+        width: 3vw;
+    }
+}
+
+#layoutcontent {
+    display: flex;
+}
+
+#sidebar { 
+    height: 100vh;
+    width: 5%;
+    background-color: rgba(28, 40, 51, 1);
+    transition: all 0.5s ease-in-out;
+}
+
+#sidebar.open{
+    width: 30%;
+}
+
+.layoutlink {
+    color: black;
+    background-color: white;
+    text-decoration: none;
+    text-align: center;
+    width: 50%;
+    margin: 50px 0 0 0;
+    padding: 20px 0px 20px 0px;
+    border-radius: 10px;
+}
+
+#layoutlinkscontainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+}
+
+#modal-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #BAC3CD;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 101;
+    width: 50%;
+    height: 60%;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+@media (orientation: portrait) {
+    #modal-content {
+        width: 80%;
+    }
+}
+
+#contentcontainer {
+    display: flex;
+}
+
+#sidebarsettings {
+    margin: 10px;
+    height: 954;
+    width: 10vw;
+    border-radius: 5px;
+    background-color: rgba(28, 40, 51, 1);
+    transition: all 0.5s ease-in-out;
+}
+
+#sidebarsettings.open{
+    width: 30%;
+}
+
+#settingstab {
+    margin: 0;
+}
+
+.xicon {
+    font-size: 30px;
+    margin: 2.5px 2.5px 0 0;
 }

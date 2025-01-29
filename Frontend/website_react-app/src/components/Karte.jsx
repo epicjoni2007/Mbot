@@ -1,7 +1,7 @@
 const Karte = () => {
     return(
         <div id="karte">
-
+            KARTE
         </div>
     )
 }

@@ -38,8 +38,8 @@ function FirstConfig({ onComplete }) {
             />
             </div>
             <button onClick={sendData} id="confirmbutton">Bestätigen</button>
-            {errorMessage && <p id="errormessage">{errorMessage}</p>}
         </div>
+        {errorMessage && <p id="errormessage">{errorMessage}</p>}
       </div>
     </div>
   )

@@ -20,10 +20,23 @@
     width: 50%;
     height: 60%;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 #firstconfigtitle {
     font-size: 40px;
+}
+
+#datainputfields {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0 0 0;
+    height: 75%;
 }
 
 .datainputfield {
@@ -41,13 +54,6 @@
     border: 1px solid #BAC3CD;
 }
 
-#datainputfields {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 20px 0 0 0;
-}
-
 #confirmbutton {
     border: none;
     cursor: pointer;
@@ -62,6 +68,24 @@
 }
 
 #errormessage {
-    margin: 10px 0 0 0;
+    margin: 0;
     color: #ef4444;
+}
+
+@media (orientation: portrait) {
+    #firstconfigtitle {
+        font-size: 35px;
+    }
+
+    #modal-content-config {
+        width: 75%;
+    }
+
+    .datainputfield input {
+        width: 50vw;
+    }
+
+    #confirmbutton {
+        width: 50vw;
+    }
 }

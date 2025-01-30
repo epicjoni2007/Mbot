@@ -152,6 +152,8 @@
     z-index: 101;
     width: 50%;
     height: 60%;
+    display: flex;
+    justify-content: space-between;
 }
 
 @media (orientation: portrait) {

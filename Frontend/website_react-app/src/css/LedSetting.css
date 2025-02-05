@@ -1,0 +1,10 @@
+.customcolorpicker {
+    height: 50vh;
+    width: 25vw;
+}
+
+@media (orientation: portrait) {
+    .customcolorpicker {
+        width: 35vw;
+    }
+}

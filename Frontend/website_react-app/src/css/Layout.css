@@ -157,14 +157,14 @@
 }
 
 @media (orientation: portrait) {
-    #modal-content {
+    #modal-content-layout {
         width: 80%;
     }
 }
 
 #contentcontainer {
     display: flex;
-    width: 100%;
+    width: 75%;
 }
 
 #sidebarsettings {
@@ -207,14 +207,23 @@
 #settingstab {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
     margin: 10px;
-    width: 75%;
+    width: 100%;
 }
 
-#settingsbottom {
+/* #opensettingstab {
+    height: 100%;
+} */
+
+#settingsright {
     display: flex;
-    justify-content: right;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: end;
+    padding: 10px;
+    width: 25%;
 }
 
 .xicon {
@@ -251,7 +260,7 @@
     cursor: pointer;
     background-color: rgba(28, 40, 51, 1);
     color: #98A2AD;
-    width: 20%;
+    width: 10vw;
     padding: 10px 0 10px 0;
     border-radius: 2vh;
     display: flex;
@@ -264,4 +273,10 @@
     background-color: black;
     box-shadow: 5px;
     color: white;
+}
+
+@media (orientation: portrait) {
+    #savebutton {
+        width: 15vw;
+    }
 }

@@ -82,12 +82,12 @@ const Layout = () => {
                             </div>
                             <div id="settingstab">
                                 <div id="opensettingstab">{openSettingsTab ? <LedSetting setNewColors={setLedColor}/> : <div>GESCHWINDIGKEIT</div>}</div>
-                                <div id="settingsbottom">
-                                    <div id="savebutton" onClick={saveSetting}>Save</div>
-                                </div>
                             </div>
                         </div>
-                        <i onClick={toggleModal} className="uil uil-times xicon"></i>
+                        <div id="settingsright">
+                            <i onClick={toggleModal} className="uil uil-times xicon"></i>
+                            <div id="savebutton" onClick={saveSetting}>Save</div>
+                        </div>
                     </div>
                 </div>
             )}

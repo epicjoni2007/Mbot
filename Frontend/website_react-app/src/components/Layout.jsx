@@ -9,10 +9,10 @@ const Layout = () => {
     const [openSettingsTab, setOpenSettingsTab] = useState(true)
     const [selectedTab, setSelectedTab] = useState(0)
     const [ledColor, setLedColor] = useState({
-                                                "R": 255,
-                                                "G": 255,
-                                                "B": 255
-                                            })
+                                        "R": 255,
+                                        "G": 255,
+                                        "B": 255
+                                    })
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen)

@@ -164,6 +164,7 @@
 
 #contentcontainer {
     display: flex;
+    width: 100%;
 }
 
 #sidebarsettings {
@@ -204,7 +205,16 @@
 }
 
 #settingstab {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     margin: 10px;
+    width: 75%;
+}
+
+#settingsbottom {
+    display: flex;
+    justify-content: right;
 }
 
 .xicon {
@@ -226,4 +236,32 @@
         padding: 2.5vh;
         width: 100%;
     }
+}
+
+.setting {
+    display: flex;
+    justify-content: space-between;
+}
+
+.settingdescriptor {
+    color: black;
+}
+
+#savebutton {
+    cursor: pointer;
+    background-color: rgba(28, 40, 51, 1);
+    color: #98A2AD;
+    width: 20%;
+    padding: 10px 0 10px 0;
+    border-radius: 2vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease-in-out;
+}
+
+#savebutton:hover {
+    background-color: black;
+    box-shadow: 5px;
+    color: white;
 }

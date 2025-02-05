@@ -12,18 +12,6 @@ import FirstConfig from "./components/FirstConfig"
 function App() {
   const [showFirstConfig, setShowFirstConfig] = useState(true)
 
-  // useEffect(() => {
-  //   const isFirstConfigDone = localStorage.getItem("firstConfigDone")
-  //   if (!isFirstConfigDone) {
-  //     setShowFirstConfig(true)
-  //   }
-  // }, [])
-
-  // const handleFirstConfigComplete = () => {
-  //   localStorage.setItem("firstConfigDone", "true")
-  //   setShowFirstConfig(false)
-  // }
-
   return (
     <div id='container1'>
       {showFirstConfig ? (

@@ -7,17 +7,37 @@ function FirstConfig({ onComplete }) {
   const [errorMessage, setErrorMessage] = useState("")
 
   const sendData = () => {
-    if (!ipAddress || !username) {
-        setErrorMessage("Bitte alle Felder ausfüllen!")
-    }else {
-        onComplete(false)
-    }
+    // if(!isValidIpAddress()) {
+    //   setErrorMessage("IP Adresse nicht korrekt eingegeben!")
+    //   return
+    // }
+    // if(!isValidName()) {
+    //   setErrorMessage("Name nicht korrekt eingegeben!")
+    //   return
+    // }
+    // if (!ipAddress || !username) {
+    //     setErrorMessage("Bitte alle Felder ausfüllen!")
+    // }else {
+    //     onComplete(false)
+    //     return
+    // }
+    onComplete(false)
+  }
+
+  const isValidIpAddress = () => {
+    const ipRegex = /^(25[0-5]|2[0-4][0-9]|1\d{2}|[1-9]?\d)(\.(25[0-5]|2[0-4][0-9]|1\d{2}|[1-9]?\d)){3}$/
+    return ipRegex.test(ipAddress)
+  }
+
+  const isValidName = () => {
+    const nameRegex = /^[a-zA-Z0-9]{1,10}$/
+    return nameRegex.test(username)
   }
 
   return (
     <div id="modal-overlay-config">
       <div id="modal-content-config">
-        <div id="firstconfigtitle">IP-Konfiguration</div>
+        <div id="firstconfigtitle">IP-Verbindung</div>
         <div id="datainputfields">
             <div className="datainputfield">
             <label>IP-Adresse</label>

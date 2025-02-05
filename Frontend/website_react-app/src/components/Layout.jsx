@@ -1,12 +1,18 @@
 import { Outlet, Link } from "react-router-dom"
 import { useState } from "react"
+import LedSetting from "./LedSetting"
 import '../css/Layout.css'
 
 const Layout = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const [modalOpen, setModalOpen] = useState(false)
-    const [openSettingsTab, setOpenSettingsTab] = useState(false)
+    const [openSettingsTab, setOpenSettingsTab] = useState(true)
     const [selectedTab, setSelectedTab] = useState(0)
+    const [ledColor, setLedColor] = useState({
+                                                "R": 255,
+                                                "G": 255,
+                                                "B": 255
+                                            })
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen)
@@ -14,6 +20,17 @@ const Layout = () => {
 
     const toggleModal = () => {
         setModalOpen(!modalOpen)
+    }
+
+    const saveSetting = async () => {
+        // const response = await fetch("http://10.10.1.217:8080/led", {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify(ledColor)
+        // })
+        // console.log(await response.json())
     }
 
     return (
@@ -60,14 +77,17 @@ const Layout = () => {
                     <div id="modal-content-layout">
                         <div id="contentcontainer">
                             <div id="sidebarsettings">
-                                <div onClick={() => setOpenSettingsTab(false)} className={`settingmenuitem ${openSettingsTab ? "" : "selected"}`}>Geschw.</div>
+                                {/* <div onClick={() => setOpenSettingsTab(false)} className={`settingmenuitem ${openSettingsTab ? "" : "selected"}`}>Geschw.</div> */}
                                 <div onClick={() => setOpenSettingsTab(true)} className={`settingmenuitem ${openSettingsTab ? "selected" : ""}`}>LED</div>
                             </div>
                             <div id="settingstab">
-                                <div id="opensettingstab">{openSettingsTab ? <div>LED</div> : <div>GESCHWINDIGKEIT</div>}</div>
+                                <div id="opensettingstab">{openSettingsTab ? <LedSetting setNewColors={setLedColor}/> : <div>GESCHWINDIGKEIT</div>}</div>
+                                <div id="settingsbottom">
+                                    <div id="savebutton" onClick={saveSetting}>Save</div>
+                                </div>
                             </div>
                         </div>
-                        <i onClick={toggleModal} class="uil uil-times xicon"></i>
+                        <i onClick={toggleModal} className="uil uil-times xicon"></i>
                     </div>
                 </div>
             )}

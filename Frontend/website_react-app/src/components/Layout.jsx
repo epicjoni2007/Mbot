@@ -55,9 +55,9 @@ const Layout = () => {
             </div>
 
             {modalOpen && (
-                <div id="modal">
-                    <div id="modal-overlay" onClick={toggleModal}></div>
-                    <div id="modal-content">
+                <div className="modal">
+                    <div id="modal-overlay-layout" onClick={toggleModal}></div>
+                    <div id="modal-content-layout">
                         <div id="contentcontainer">
                             <div id="sidebarsettings">
                                 <div onClick={() => setOpenSettingsTab(false)} className={`settingmenuitem ${openSettingsTab ? "" : "selected"}`}>Geschw.</div>

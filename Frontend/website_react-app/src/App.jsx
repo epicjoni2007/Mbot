@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
+import { useState, useEffect } from "react"
 import './App.css'
 import Layout from './components/Layout'
 import Home from './components/Home'
@@ -6,11 +7,29 @@ import Joystick from './components/Joystick'
 import RouteDefine from './components/RouteDefine'
 import Karte from './components/Karte'
 import NoPage from './components/NoPage'
+import FirstConfig from "./components/FirstConfig"
 
 function App() {
+  const [showFirstConfig, setShowFirstConfig] = useState(true)
+
+  // useEffect(() => {
+  //   const isFirstConfigDone = localStorage.getItem("firstConfigDone")
+  //   if (!isFirstConfigDone) {
+  //     setShowFirstConfig(true)
+  //   }
+  // }, [])
+
+  // const handleFirstConfigComplete = () => {
+  //   localStorage.setItem("firstConfigDone", "true")
+  //   setShowFirstConfig(false)
+  // }
+
   return (
     <div id='container1'>
-      <BrowserRouter>
+      {showFirstConfig ? (
+        <FirstConfig onComplete={setShowFirstConfig} />
+      ) : (
+        <BrowserRouter>
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Navigate to="/home" replace />} />
@@ -22,6 +41,7 @@ function App() {
             </Route>
           </Routes>
         </BrowserRouter>
+      )}
     </div>
   )
 }

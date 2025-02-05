@@ -1,0 +1,91 @@
+#modal-overlay-config {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+}
+
+#modal-content-config {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #BAC3CD;
+    border-radius: 20px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 101;
+    width: 50%;
+    height: 60%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#firstconfigtitle {
+    font-size: 40px;
+}
+
+#datainputfields {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0 0 0;
+    height: 75%;
+}
+
+.datainputfield {
+    display: flex;
+    flex-direction: column;
+}
+
+.datainputfield input {
+    outline: none;
+    border-radius: 5px;
+    padding: 5px;
+    width: 20vw;
+    height: 5vh;
+    font-size: 3vh;
+    border: 1px solid #BAC3CD;
+}
+
+#confirmbutton {
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+    margin: 15px 0 0 0;
+    padding: 0;
+    width: 10vw;
+    height: 7.5vh;
+    font-size: 3vh;
+    color: white;
+    background-color: rgba(28, 40, 51, 1);
+}
+
+#errormessage {
+    margin: 0;
+    color: #ef4444;
+}
+
+@media (orientation: portrait) {
+    #firstconfigtitle {
+        font-size: 35px;
+    }
+
+    #modal-content-config {
+        width: 75%;
+    }
+
+    .datainputfield input {
+        width: 50vw;
+    }
+
+    #confirmbutton {
+        width: 50vw;
+    }
+}

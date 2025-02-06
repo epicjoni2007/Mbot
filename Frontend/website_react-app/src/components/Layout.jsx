@@ -23,14 +23,14 @@ const Layout = () => {
     }
 
     const saveSetting = async () => {
-        // const response = await fetch("http://10.10.1.217:8080/led", {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify(ledColor)
-        // })
-        // console.log(await response.json())
+        const response = await fetch("/led", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(ledColor)
+        })
+        console.log(await response.json())
     }
 
     return (

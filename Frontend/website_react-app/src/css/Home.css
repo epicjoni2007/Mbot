@@ -1,0 +1,47 @@
+#home {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+#homemainicon {
+    height: 50vh;
+    border-radius: 20px;
+}
+
+@media (orientation: portrait) {
+    #homemainicon {
+        display: none;
+    }
+}
+
+#datatabs {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.datatab {
+    max-width: 95%;
+    width: 50vh;
+    height: 50vh;
+    background-color: rgba(28, 40, 51, 1);
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+@media (orientation: portrait) {
+    .datatab {
+        max-height: 40%;
+    }
+}
+
+.datatabtext {
+    color: white;
+    font-size: 2vh;
+    margin: 4vh 0 0 4vh;
+}

@@ -22,13 +22,11 @@ s.listen(5)
 cyberpi.console.println(ip)
 cyberpi.console.println(port)
 
-# Liste zur Speicherung der Strecke und Drehung
+# Liste zur Speicherung der Strecke
 track = []
 recording = False
 current_command = None
 start_time = None
-wheel_circumference = 21.98  # Umfang eines Rades in cm
-turn_degrees_per_speed = 0.5  # Dies stellt die Anzahl der Grad pro Geschwindigkeitseinheit dar, dies ist eine Annahme
 
 def send_response(client, status_code, body):
     response = "HTTP/1.1 {} OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\n\r\n{}".format(status_code, len(ujson.dumps(body)), ujson.dumps(body))
@@ -48,34 +46,8 @@ def record_movement():
     if current_command and start_time:
         direction, speed = current_command
         duration = time.time() - start_time
-        distance = (speed / 100) * wheel_circumference * duration  # Berechnung der zurückgelegten Strecke in cm
-        
-        # Berechnung der Drehung in Grad
-        turn_degrees = 0
-        if direction == "left" or direction == "right":
-            turn_degrees = speed * turn_degrees_per_speed * duration  # Drehung in Grad basierend auf Geschwindigkeit und Zeit
-
-        track.append({"direction": direction, "speed": speed, "duration": duration, "distance_cm": distance, "turn_degrees": turn_degrees})
+        track.append({"direction": direction, "speed": speed, "duration": duration})
         start_time = time.time()
-
-def replay_track():
-    for step in track:
-        direction = step["direction"]
-        speed = step["speed"]
-        duration = step["duration"]
-
-        if direction == "forward":
-            mbot2.forward(speed)
-        elif direction == "backward":
-            mbot2.backward(speed)
-        elif direction == "left":
-            mbot2.turn_left(speed)
-        elif direction == "right":
-            mbot2.turn_right(speed)
-        
-        time.sleep(duration)
-    
-    cyberpi.mbot2.drive_power(0, 0)  # Stop the mBot after replay
 
 def handle_request(client):
     global recording, track, current_command, start_time
@@ -128,10 +100,6 @@ def handle_request(client):
             except (ValueError, KeyError):
                 send_response(client, 400, {"error": "Invalid movement data"})
         
-        elif method == "POST" and path == "/replay":
-            if track:
-                replay_track()
-                send_response(client, 200, {"message": "Replay started"})
         else:
             send_response(client, 404, {"error": "Not found"})
     except Exception as e:

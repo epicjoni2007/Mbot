@@ -1,4 +1,4 @@
-import cyberpi
+import cyberpi 
 import time
 import usocket
 import ujson
@@ -22,13 +22,11 @@ s.listen(5)
 cyberpi.console.println(ip)
 cyberpi.console.println(port)
 
-# Liste zur Speicherung der Strecke und Drehung
+# Liste zur Speicherung der Bewegungen
 track = []
 recording = False
 current_command = None
 start_time = None
-wheel_circumference = 21.98  # Umfang eines Rades in cm
-turn_degrees_per_speed = 0.5  # Dies stellt die Anzahl der Grad pro Geschwindigkeitseinheit dar, dies ist eine Annahme
 
 def send_response(client, status_code, body):
     response = "HTTP/1.1 {} OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\n\r\n{}".format(status_code, len(ujson.dumps(body)), ujson.dumps(body))
@@ -43,27 +41,28 @@ def parse_request(request):
     method, path, _ = lines[0].split()
     return method, path, body
 
+def set_led(r, g, b):
+    """Setzt die Farbe der LEDs"""
+    cyberpi.led.on(r, g, b)
+
 def record_movement():
+    """Speichert die aktuelle Bewegung (Richtung, Geschwindigkeit, Dauer in ms)"""
     global track, current_command, start_time
     if current_command and start_time:
         direction, speed = current_command
-        duration = time.time() - start_time
-        distance = (speed / 100) * wheel_circumference * duration  # Berechnung der zurückgelegten Strecke in cm
-        
-        # Berechnung der Drehung in Grad
-        turn_degrees = 0
-        if direction == "left" or direction == "right":
-            turn_degrees = speed * turn_degrees_per_speed * duration  # Drehung in Grad basierend auf Geschwindigkeit und Zeit
+        duration_ms = time.ticks_diff(time.ticks_ms(), start_time)
 
-        track.append({"direction": direction, "speed": speed, "duration": duration, "distance_cm": distance, "turn_degrees": turn_degrees})
-        start_time = time.time()
+        track.append({"direction": direction, "speed": speed, "duration_ms": duration_ms})
+        start_time = time.ticks_ms()
 
-def replay_track():
-    for step in track:
-        direction = step["direction"]
-        speed = step["speed"]
-        duration = step["duration"]
+def execute_steps(steps):
+    """Führt eine übergebene Map (Liste von Bewegungen) aus"""
+    for step in steps:
+        direction = step.get("direction", "stop")
+        speed = step.get("speed", 0)
+        duration_ms = step.get("duration_ms", 0)
 
+        # Bewegung ausführen
         if direction == "forward":
             mbot2.forward(speed)
         elif direction == "backward":
@@ -72,10 +71,18 @@ def replay_track():
             mbot2.turn_left(speed)
         elif direction == "right":
             mbot2.turn_right(speed)
-        
-        time.sleep(duration)
-    
-    cyberpi.mbot2.drive_power(0, 0)  # Stop the mBot after replay
+        else:
+            cyberpi.mbot2.drive_power(0, 0)  # Stoppen
+
+        # Wartezeit entsprechend der Dauer
+        time.sleep_ms(duration_ms)
+
+    # Nach Abschluss anhalten
+    cyberpi.mbot2.drive_power(0, 0)
+
+def replay_track():
+    """Wiederholt die aufgezeichnete Strecke"""
+    execute_steps(track)
 
 def handle_request(client):
     global recording, track, current_command, start_time
@@ -83,11 +90,11 @@ def handle_request(client):
         request = client.recv(1024).decode("utf-8")
         cyberpi.console.println(request)
         method, path, body = parse_request(request)
-        
+
         if method == "POST" and path == "/start_recording":
             track = []
             recording = True
-            start_time = time.time()
+            start_time = time.ticks_ms()
             send_response(client, 200, {"message": "Recording started"})
         
         elif method == "POST" and path == "/stop_recording":
@@ -95,16 +102,16 @@ def handle_request(client):
                 record_movement()
             recording = False
             send_response(client, 200, {"message": "Recording stopped", "track": track})
-        
+
         elif method == "GET" and path == "/get_track":
             send_response(client, 200, {"track": track})
-        
+
         elif method == "POST" and path == "/move":
             try:
                 data = ujson.loads(body)
                 direction = data.get('direction', 'stop')
                 speed = data.get('speed', 0)
-                
+
                 if speed == 0:
                     if recording:
                         record_movement()
@@ -114,7 +121,8 @@ def handle_request(client):
                     if recording and current_command:
                         record_movement()
                     current_command = (direction, speed)
-                    start_time = time.time()
+                    start_time = time.ticks_ms()
+
                     if direction == "forward":
                         mbot2.forward(speed)
                     elif direction == "backward":
@@ -123,17 +131,44 @@ def handle_request(client):
                         mbot2.turn_left(speed)
                     elif direction == "right":
                         mbot2.turn_right(speed)
-                
+
                 send_response(client, 200, {"message": "Movement executed"})
             except (ValueError, KeyError):
                 send_response(client, 400, {"error": "Invalid movement data"})
-        
+
         elif method == "POST" and path == "/replay":
             if track:
                 replay_track()
                 send_response(client, 200, {"message": "Replay started"})
+
+        elif method == "POST" and path == "/execute_map":
+            try:
+                data = ujson.loads(body)
+                steps = data.get("map", [])
+
+                if not isinstance(steps, list):
+                    raise ValueError("Invalid map format")
+
+                execute_steps(steps)
+                send_response(client, 200, {"message": "Map executed successfully"})
+            except (ValueError, KeyError):
+                send_response(client, 400, {"error": "Invalid map data"})
+
+        elif method == "POST" and path == "/led":
+            try:
+                data = ujson.loads(body)
+                r = int(data.get("R", 0))
+                g = int(data.get("G", 0))
+                b = int(data.get("B", 0))
+
+                set_led(r, g, b)
+                send_response(client, 200, {"message": "LED color set", "r": r, "g": g, "b": b})
+            except (ValueError, KeyError):
+                send_response(client, 400, {"error": "Invalid LED data"})
+
         else:
             send_response(client, 404, {"error": "Not found"})
+
     except Exception as e:
         send_response(client, 500, {"error": "Server error: " + str(e)})
 

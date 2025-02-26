@@ -1,4 +1,4 @@
-import cyberpi
+import cyberpi 
 import time
 import usocket
 import ujson
@@ -27,8 +27,6 @@ track = []
 recording = False
 current_command = None
 start_time = None
-wheel_circumference = 21.98  # Umfang eines Rades in cm
-turn_degrees_per_speed = 0.5  # Dies stellt die Anzahl der Grad pro Geschwindigkeitseinheit dar, dies ist eine Annahme
 
 def send_response(client, status_code, body):
     response = "HTTP/1.1 {} OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\n\r\n{}".format(status_code, len(ujson.dumps(body)), ujson.dumps(body))
@@ -44,21 +42,17 @@ def parse_request(request):
     return method, path, body
 
 def record_movement():
+    """Speichert die aktuelle Bewegung (Richtung, Geschwindigkeit, Dauer)"""
     global track, current_command, start_time
     if current_command and start_time:
         direction, speed = current_command
-        duration = time.time() - start_time
-        distance = (speed / 100) * wheel_circumference * duration  # Berechnung der zurückgelegten Strecke in cm
-        
-        # Berechnung der Drehung in Grad
-        turn_degrees = 0
-        if direction == "left" or direction == "right":
-            turn_degrees = speed * turn_degrees_per_speed * duration  # Drehung in Grad basierend auf Geschwindigkeit und Zeit
+        duration = time.time() - start_time  # Dauer der Bewegung in Sekunden
 
-        track.append({"direction": direction, "speed": speed, "duration": duration, "distance_cm": distance, "turn_degrees": turn_degrees})
-        start_time = time.time()
+        track.append({"direction": direction, "speed": speed, "duration": duration})
+        start_time = time.time()  # Setzt die Startzeit für die nächste Bewegung zurück
 
 def replay_track():
+    """Spielt die gespeicherte Bewegung erneut ab"""
     for step in track:
         direction = step["direction"]
         speed = step["speed"]
@@ -75,9 +69,10 @@ def replay_track():
         
         time.sleep(duration)
     
-    cyberpi.mbot2.drive_power(0, 0)  # Stop the mBot after replay
+    cyberpi.mbot2.drive_power(0, 0)  # Stoppt den mBot nach dem Abspielen der Bewegungen
 
 def handle_request(client):
+    """Verarbeitet die HTTP-Anfragen"""
     global recording, track, current_command, start_time
     try:
         request = client.recv(1024).decode("utf-8")
@@ -115,6 +110,7 @@ def handle_request(client):
                         record_movement()
                     current_command = (direction, speed)
                     start_time = time.time()
+                    
                     if direction == "forward":
                         mbot2.forward(speed)
                     elif direction == "backward":
@@ -132,6 +128,7 @@ def handle_request(client):
             if track:
                 replay_track()
                 send_response(client, 200, {"message": "Replay started"})
+        
         else:
             send_response(client, 404, {"error": "Not found"})
     except Exception as e:

@@ -28,7 +28,9 @@ recording = False
 current_command = None
 start_time = None
 wheel_circumference = 21.98  # Umfang eines Rades in cm
-turn_degrees_per_speed = 0.5  # Dies stellt die Anzahl der Grad pro Geschwindigkeitseinheit dar, dies ist eine Annahme
+
+# Drehung in Grad pro Sekunde bei gegebener Geschwindigkeit (Schätzungswert)
+turn_degrees_per_second = 90  # z.B. 90 Grad pro Sekunde für eine bestimmte Geschwindigkeit
 
 def send_response(client, status_code, body):
     response = "HTTP/1.1 {} OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\n\r\n{}".format(status_code, len(ujson.dumps(body)), ujson.dumps(body))
@@ -50,10 +52,10 @@ def record_movement():
         duration = time.time() - start_time
         distance = (speed / 100) * wheel_circumference * duration  # Berechnung der zurückgelegten Strecke in cm
         
-        # Berechnung der Drehung in Grad
+        # Berechnung der Drehung in Grad basierend auf der Zeit
         turn_degrees = 0
         if direction == "left" or direction == "right":
-            turn_degrees = speed * turn_degrees_per_speed * duration  # Drehung in Grad basierend auf Geschwindigkeit und Zeit
+            turn_degrees = turn_degrees_per_second * duration  # Drehung in Grad basierend auf der Dauer der Drehung
 
         track.append({"direction": direction, "speed": speed, "duration": duration, "distance_cm": distance, "turn_degrees": turn_degrees})
         start_time = time.time()
@@ -132,6 +134,7 @@ def handle_request(client):
             if track:
                 replay_track()
                 send_response(client, 200, {"message": "Replay started"})
+        
         else:
             send_response(client, 404, {"error": "Not found"})
     except Exception as e:

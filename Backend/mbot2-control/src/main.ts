@@ -1,15 +1,19 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { ProxyMiddleware } from './middleware/proxy.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Enable CORS with custom options
-  app.enableCors({
-    origin: 'http://10.10.1.50:5173',  // Allow only the frontend's domain
-    methods: 'GET, POST',  // Limit the allowed methods
-  });
-  await app.listen(process.env.PORT ?? 3500);  // Listen on the provided port or fallback to 3500
-}
+  // Enable CORS (if needed)
+  app.enableCors();
 
+  // Apply proxy middleware
+  app.use(new ProxyMiddleware().use);
+
+  await app.listen(3500);
+  console.log('NestJS running on http://localhost:3500');
+}
 bootstrap();
+
+

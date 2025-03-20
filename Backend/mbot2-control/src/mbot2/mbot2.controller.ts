@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
 import { Mbot2Service } from './mbot2.service';
 
-@Controller('mbot')
+@Controller('')
 export class Mbot2Controller {
   constructor(private readonly mbotService: Mbot2Service) {}
 

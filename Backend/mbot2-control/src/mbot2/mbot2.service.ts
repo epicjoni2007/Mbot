@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 
 // Target Server Configuration
-const TARGET_IP = '10.10.3.188'; // IP of the mBot2 HTTP server
+const TARGET_IP = '10.10.1.217'; // IP of the mBot2 HTTP server
 const GENERAL_PORT = 8080; // Port for all requests
 
 @Injectable()

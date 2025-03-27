@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 
 // Target Server Configuration
-const TARGET_IP = '10.10.1.217'; // IP of the mBot2 HTTP server
+const TARGET_IP = '10.10.1.28'; // IP of the mBot2 HTTP server
 const GENERAL_PORT = 8080; // Port for all requests
 
 @Injectable()
@@ -30,6 +30,10 @@ export class Mbot2Service {
   async sendMovementCommand(direction: string, speed: number, r: number = 0, g: number = 0, b: number = 0) {
     const command = { direction, speed, R: r, G: g, B: b };
     return await this.sendHttpRequest('POST', 'move', command);
+  }
+  // Sensordata
+  async getSensorData() {
+    return await this.sendHttpRequest('GET', 'sensor-data');
   }
 
   // Function to start recording

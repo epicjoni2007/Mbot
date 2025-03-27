@@ -36,6 +36,11 @@ export class Mbot2Controller {
     return await this.mbotService.getTrack();
   }
 
+  @Get('sensor-data')
+  async getSensorData() {
+    return await this.mbotService.getSensorData();
+  }
+
   // Endpoint to control the LED
   @Post('led')
   async setLed(@Body() body: { r: number; g: number; b: number }) {

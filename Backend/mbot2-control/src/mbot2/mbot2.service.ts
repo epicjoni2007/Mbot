@@ -59,11 +59,11 @@ export class Mbot2Service {
   }
 
   // Function to execute a predefined map of movements
-  async executeMovementMap(map: { direction: string, speed: number, duration_ms: number }[]) {
+  async executeMovementMap(map: { direction: string, speed: number, duration: number }[]) {
     for (const step of map) {
-      const { direction, speed, duration_ms } = step;
+      const { direction, speed, duration } = step;
       await this.sendMovementCommand(direction, speed);  // LED color can be added as needed
-      await new Promise(resolve => setTimeout(resolve, duration_ms)); // wait for the next step
+      await new Promise(resolve => setTimeout(resolve, duration)); // wait for the next step
     }
     return { message: 'Map executed successfully' };
   }

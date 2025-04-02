@@ -3,6 +3,7 @@ import time
 import usocket
 import ujson
 import mbot2
+import mbuild
 
 # WLAN-Konfiguration
 cyberpi.network.config_sta("htljoh-public", "joh12345")
@@ -50,9 +51,9 @@ def record_movement():
     global track, current_command, start_time
     if current_command and start_time:
         direction, speed = current_command
-        duration_ms = time.ticks_diff(time.ticks_ms(), start_time)
+        duration = time.ticks_diff(time.ticks_ms(), start_time)
 
-        track.append({"direction": direction, "speed": speed, "duration_ms": duration_ms})
+        track.append({"direction": direction, "speed": speed, "duration": duration})
         start_time = time.ticks_ms()
 
 def execute_steps(steps):
@@ -60,7 +61,7 @@ def execute_steps(steps):
     for step in steps:
         direction = step.get("direction", "stop")
         speed = step.get("speed", 0)
-        duration_ms = step.get("duration_ms", 0)
+        duration = step.get("duration", 0)
 
         # Bewegung ausführen
         if direction == "forward":
@@ -75,15 +76,28 @@ def execute_steps(steps):
             cyberpi.mbot2.drive_power(0, 0)  # Stoppen
 
         # Wartezeit entsprechend der Dauer
-        time.sleep_ms(duration_ms)
+        time.sleep_ms(duration)
 
     # Nach Abschluss anhalten
     cyberpi.mbot2.drive_power(0, 0)
 
 def replay_track():
     """Wiederholt die aufgezeichnete Strecke"""
+    if not track:
+        cyberpi.console.println("Keine Strecke zum Wiederholen!")
+        return
+
+    # Hier spielen wir die Bewegungen der track-Liste nach
+    cyberpi.console.println("Starte Wiederholung der Strecke...")
     execute_steps(track)
 
+def get_sensor_data():
+    return {
+        "timer": cyberpi.timer.get(),
+        "distance": mbuild.ultrasonic2.get(1),
+        "yaw": -cyberpi.get_yaw(),
+        "loudness": cyberpi.get_loudness("maximum")
+    }
 def handle_request(client):
     global recording, track, current_command, start_time
     try:
@@ -108,6 +122,9 @@ def handle_request(client):
             recording = False
             send_response(client, 200, {"message": "Recording stopped", "track": track})
 
+        elif method == "GET" and path == "/sensor-data":
+            send_response(client, 200, get_sensor_data())
+            
         elif method == "GET" and path == "/get_track":
             send_response(client, 200, {"track": track})
 
@@ -145,6 +162,8 @@ def handle_request(client):
             if track:
                 replay_track()
                 send_response(client, 200, {"message": "Replay started"})
+            else:
+                send_response(client, 404, {"error": "No track available for replay"})
 
         elif method == "POST" and path == "/execute_map":
             try:

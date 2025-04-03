@@ -10,7 +10,7 @@ export class ProxyMiddleware implements NestMiddleware {
       const proxy = createProxyMiddleware({
         target: 'http://localhost:3500', // Ziel-Backend
         changeOrigin: true,
-        pathRewrite: { '^/mbot': '' }, // "/api" entfernen
+        pathRewrite: { '^/mbot': '' },
       });
 
       proxy(req, res, next);

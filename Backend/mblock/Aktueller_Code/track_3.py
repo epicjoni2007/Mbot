@@ -91,6 +91,35 @@ def replay_track():
     cyberpi.console.println("Starte Wiederholung der Strecke...")
     execute_steps(track)
 
+def getCartography():
+    global count
+    count = 1
+    while True:
+      mbot2.forward(50)
+      cyberpi.console.println(count)
+      if mbuild.ultrasonic2.get(1) < 15 and count == 1:
+        mbot2.straight(5)
+        mbot2.turn(90)
+        mbot2.straight(15)
+        mbot2.turn(-90)
+        cyberpi.console.println(count)
+        if mbuild.ultrasonic2.get(1) < 15:
+          mbot2.turn(180)
+          count = 0
+          cyberpi.console.println(count)
+ 
+      if mbuild.ultrasonic2.get(1) < 15 and count == 0:
+        mbot2.straight(5)
+        mbot2.turn(-90)
+        mbot2.straight(15)
+        mbot2.turn(90)
+        cyberpi.console.println(count)
+        if mbuild.ultrasonic2.get(1) < 15:
+          mbot2.turn(-180)
+          count = 1
+          cyberpi.console.println(count)
+    return "H"
+   
 
 
 def execute_stepsmap(steps):
@@ -155,6 +184,10 @@ def handle_request(client):
             
         elif method == "GET" and path == "/get_track":
             send_response(client, 200, {"track": track})
+            
+        elif method == "GET" and path == "/cartography":
+            cyberpi.console.println("cartography")
+            send_response(client, 200, getCartography())
 
         elif method == "POST" and path == "/move":
             try:

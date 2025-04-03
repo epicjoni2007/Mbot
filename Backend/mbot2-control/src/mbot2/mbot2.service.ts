@@ -56,11 +56,17 @@ export class Mbot2Service {
     return await this.sendHttpRequest('GET', 'get_track');
   }
 
+  async getCartography() {
+    return await this.sendHttpRequest('GET', 'cartography');
+  }
+
+
   // Function to control LED
   async setLedColor(r: number, g: number, b: number) {
     const command = { R: r, G: g, B: b };
     return await this.sendHttpRequest('POST', 'led', command);
   }
+
 
 
   async executeMovementMap(map: { direction: string, speed: number, duration: number, rotation?: number }[]) {

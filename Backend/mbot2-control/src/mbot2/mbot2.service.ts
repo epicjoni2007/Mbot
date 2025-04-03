@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 
 // Target Server Configuration
-const TARGET_IP = '10.10.1.78'; // IP of the mBot2 HTTP server
+const TARGET_IP = '10.10.2.137'; // IP of the mBot2 HTTP server
 const GENERAL_PORT = 8080; // Port for all requests
 
 @Injectable()
@@ -62,14 +62,9 @@ export class Mbot2Service {
     return await this.sendHttpRequest('POST', 'led', command);
   }
 
-  // Function to execute a predefined map of movements
-  async executeMovementMap(map: { direction: string, speed: number, duration: number }[]) {
-    for (const step of map) {
-      const { direction, speed, duration } = step;
-      await this.sendMovementCommand(direction, speed);  // LED color can be added as needed
-      await new Promise(resolve => setTimeout(resolve, duration)); // wait for the next step
-    }
-    return { message: 'Map executed successfully' };
+
+  async executeMovementMap(map: { direction: string, speed: number, duration: number, rotation?: number }[]) {
+    return await this.sendHttpRequest('POST', 'execute_map', { map });
   }
 
   async getStatus() {

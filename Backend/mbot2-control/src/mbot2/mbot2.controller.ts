@@ -50,9 +50,8 @@ export class Mbot2Controller {
 
   // Endpoint to execute a predefined map of movements
   @Post('execute-map')
-  async executeMap(@Body() body: { map: { direction: string, speed: number, duration: number }[] }) {
-    const { map } = body;
-    return await this.mbotService.executeMovementMap(map);
+  async executeMap(@Body() body: { map: { direction: string, speed: number, duration: number, rotation?: number }[] }) {
+    return await this.mbotService.executeMovementMap(body.map);
   }
 
   @Get('status')

@@ -152,7 +152,14 @@ def handle_request(client):
                     elif direction == "right":
                         mbot2.turn_right(speed)
 
-
+                    if mbuild.ultrasonic2.get(1) < 15:
+                                mbot2.EM_stop("ALL")
+                                mbot2.turn(90)
+                    
+                    if mbuild.quad_rgb_sensor.get_gray("L2",1) < 10 or mbuild.quad_rgb_sensor.get_gray("R2",1) < 10:
+                                mbot2.EM_stop("ALL")
+                                mbot2.straight(-5)
+                                mbot2.turn(90)
                                 
                 send_response(client, 200, {"message": "Movement executed"})
             except (ValueError, KeyError):

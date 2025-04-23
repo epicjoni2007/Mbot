@@ -1,9 +1,20 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, HttpException, HttpStatus, Param } from '@nestjs/common';
 import { Mbot2Service } from './mbot2.service';
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { SensorData, SensorDataDocument } from './models/sensordata.schema'
+import { SensorDataService } from './services/sensordata.service';
+import { TrackService } from './services/tracks.service';
 
 @Controller('')
 export class Mbot2Controller {
-  constructor(private readonly mbotService: Mbot2Service) {}
+  constructor(
+    private readonly mbotService: Mbot2Service,
+    private readonly sensorDataService: SensorDataService,
+    private readonly trackService: TrackService,
+  ) {}
+
 
   // Endpoint to send a movement command
   @Post('move')
@@ -21,24 +32,117 @@ export class Mbot2Controller {
   // Endpoint to stop recording
   @Post('stop-recording')
   async stopRecording() {
-    return await this.mbotService.stopRecording();
+    try {
+      const response = await this.mbotService.stopRecording(); // Track-Daten abrufen
+      const trackData = response.track[0]; // Extrahiere die Track-Daten aus dem Array
+      if (trackData) {
+        const savedTrack = await this.trackService.saveTrackWithId(trackData); // Track speichern
+        return {
+          success: true,
+          message: 'Recording gestoppt und Track gespeichert.',
+          data: savedTrack,
+        };
+      } else {
+        throw new Error('Keine Track-Daten verfügbar');
+      }
+    } catch (error) {
+      console.error('Fehler beim Stoppen der Aufnahme:', error.message, error.stack);
+      throw new HttpException(
+        'Fehler beim Stoppen der Aufnahme oder Speichern des Tracks',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   // Endpoint to replay track
-  @Post('replay')
-  async replayTrack() {
-    return await this.mbotService.replayTrack();
+  @Post('replay/:id?')
+  async replayTrack(@Param('id') id?: string) {
+    try {
+      let track;
+
+      if (id) {
+        // Hole den Track anhand der ID
+        track = await this.trackService.getTrackById(id);
+        if (!track) {
+          throw new HttpException('Track nicht gefunden', HttpStatus.NOT_FOUND);
+        }
+      } else {
+        throw new HttpException('Keine Track-ID angegeben', HttpStatus.BAD_REQUEST);
+      }
+
+      // Starte den Replay des Tracks
+      const replayResult = await this.mbotService.replayTrack(track);
+
+      return {
+        success: true,
+        message: `Track mit ID ${id} wird abgefahren.`,
+        data: replayResult,
+      };
+    } catch (error) {
+      console.error('Fehler beim Replay des Tracks:', error.message, error.stack);
+      throw new HttpException(
+        'Fehler beim Replay des Tracks',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   // Endpoint to get track
-  @Get('track')
-  async getTrack() {
-    return await this.mbotService.getTrack();
+  @Get('track/:id?')
+  async getTrack(@Param('id') id?: string) {
+    try {
+      let track;
+
+      if (id) {
+        // Hole den Track anhand der ID
+        track = await this.trackService.getTrackById(id);
+        if (!track) {
+          throw new HttpException('Track nicht gefunden', HttpStatus.NOT_FOUND);
+        }
+      } else {
+        // Hole den neuesten Track
+        track = await this.trackService.getLatestTracks();
+        if (!track) {
+          throw new HttpException('Kein Track gefunden', HttpStatus.NOT_FOUND);
+        }
+      }
+
+      return {
+        success: true,
+        data: track,
+      };
+    } catch (error) {
+      throw new HttpException(
+        'Fehler beim Abrufen des Tracks',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Get('track/latest')
+  async getLatestTrack() {
+    try {
+      const latestTrack = await this.trackService.getLatestTracks();
+      if (!latestTrack) {
+        throw new HttpException('Kein Track gefunden', HttpStatus.NOT_FOUND);
+      }
+      return {
+        success: true,
+        data: latestTrack,
+      };
+    } catch (error) {
+      throw new HttpException('Fehler beim Abrufen des neuesten Tracks', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   @Get('sensor-data')
   async getSensorData() {
-    return await this.mbotService.getSensorData();
+    try {
+      const data = await this.sensorDataService.getAllSensorData();
+      return { success: true, data };
+    } catch (error) {
+      throw new HttpException('Fehler beim Abrufen der Sensordaten', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   // Endpoint to control the LED

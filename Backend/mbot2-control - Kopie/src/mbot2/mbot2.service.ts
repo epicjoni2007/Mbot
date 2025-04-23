@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
-import { Track } from './models/tracks.schema';
 
 // Target Server Configuration
-const TARGET_IP = '10.10.1.28'; // IP of the mBot2 HTTP server
+const TARGET_IP = '10.10.1.217'; // IP of the mBot2 HTTP server
 const GENERAL_PORT = 8080; // Port for all requests
 
 @Injectable()
@@ -43,28 +42,12 @@ export class Mbot2Service {
   }
 
   // Function to stop recording
-  async stopRecording(): Promise<any> {
-    // Simuliere Track-Daten
-    return {
-      message: 'Recording stopped',
-      track: [
-        {
-          duration: 3895,
-          direction: 'forward',
-          speed: 10,
-        },
-      ],
-    };
+  async stopRecording() {
+    return await this.sendHttpRequest('POST', 'stop_recording');
   }
 
   // Function to replay track
-  async replayTrack(track: Track): Promise<string> {
-    // Simuliere die Logik für das Abfahren des Tracks
-    console.log(`Starte Replay des Tracks:`, track);
-
-    // Hier könntest du die Logik implementieren, um den Track tatsächlich abzufahren
-    // Zum Beispiel: Sende Befehle an den Roboter basierend auf den Track-Daten
-
+  async replayTrack() {
     return await this.sendHttpRequest('POST', 'replay');
   }
 

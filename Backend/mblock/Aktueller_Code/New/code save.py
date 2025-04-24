@@ -33,6 +33,9 @@ def send_response(client, status_code, body):
     response = "HTTP/1.1 {} OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\n\r\n{}".format(status_code, len(ujson.dumps(body)), ujson.dumps(body))
     client.send(response)
 
+
+
+
 def parse_request(request):
     try:
         header, body = request.split("\r\n\r\n", 1)
@@ -51,9 +54,9 @@ def record_movement():
     global track, current_command, start_time
     if current_command and start_time:
         direction, speed = current_command
-        duration = time.ticks_diff(time.ticks_ms(), start_time)
+        duration_ms = time.ticks_diff(time.ticks_ms(), start_time)
 
-        track.append({"direction": direction, "speed": speed, "duration": duration})
+        track.append({"direction": direction, "speed": speed, "duration_ms": duration_ms})
         start_time = time.ticks_ms()
 
 def execute_steps(steps):
@@ -61,7 +64,7 @@ def execute_steps(steps):
     for step in steps:
         direction = step.get("direction", "stop")
         speed = step.get("speed", 0)
-        duration = step.get("duration", 0)
+        duration_ms = step.get("duration_ms", 0)
 
         # Bewegung ausführen
         if direction == "forward":
@@ -76,77 +79,16 @@ def execute_steps(steps):
             cyberpi.mbot2.drive_power(0, 0)  # Stoppen
 
         # Wartezeit entsprechend der Dauer
-        time.sleep_ms(duration)
+        time.sleep_ms(duration_ms)
 
     # Nach Abschluss anhalten
     cyberpi.mbot2.drive_power(0, 0)
 
 def replay_track():
     """Wiederholt die aufgezeichnete Strecke"""
-    if not track:
-        cyberpi.console.println("Keine Strecke zum Wiederholen!")
-        return
-
-    # Hier spielen wir die Bewegungen der track-Liste nach
-    cyberpi.console.println("Starte Wiederholung der Strecke...")
     execute_steps(track)
 
-def getCartography():
-    global count
-    count = 1
-    while True:
-      mbot2.forward(50)
-      cyberpi.console.println(count)
-      if mbuild.ultrasonic2.get(1) < 15 and count == 1:
-        mbot2.straight(5)
-        mbot2.turn(90)
-        mbot2.straight(15)
-        mbot2.turn(-90)
-        cyberpi.console.println(count)
-        if mbuild.ultrasonic2.get(1) < 15:
-          mbot2.turn(180)
-          count = 0
-          cyberpi.console.println(count)
- 
-      if mbuild.ultrasonic2.get(1) < 15 and count == 0:
-        mbot2.straight(5)
-        mbot2.turn(-90)
-        mbot2.straight(15)
-        mbot2.turn(90)
-        cyberpi.console.println(count)
-        if mbuild.ultrasonic2.get(1) < 15:
-          mbot2.turn(-180)
-          count = 1
-          cyberpi.console.println(count)
-    return "H"
-   
 
-
-def execute_stepsmap(steps):
-    for step in steps:
-        direction = step.get("direction", "stop")
-        speed = step.get("speed", 0)
-        duration = step.get("duration", 0)
-        rotation = step.get("rotation", 0)  # Grad der Drehung
-
-        if rotation != 0:
-            mbot2.drive_speed(0, 0)  # Stoppt die Bewegung
-            duration=1000
-            mbot2.turn(rotation)  # Dreht um die angegebene Gradzahl
-        elif direction == "forward":
-            mbot2.forward(speed)
-        elif direction == "backward":
-            mbot2.backward(speed)
-        elif direction == "left":
-            mbot2.turn_left(speed)
-        elif direction == "right":
-            mbot2.turn_right(speed)
-        else:
-            mbot2.drive_speed(0, 0)  # Stoppen
-        
-        time.sleep_ms(duration)
-    
-    mbot2.drive_speed(0, 0)
 
 def get_sensor_data():
     return {
@@ -155,6 +97,8 @@ def get_sensor_data():
         "yaw": -cyberpi.get_yaw(),
         "loudness": cyberpi.get_loudness("maximum")
     }
+
+
 def handle_request(client):
     global recording, track, current_command, start_time
     try:
@@ -179,15 +123,8 @@ def handle_request(client):
             recording = False
             send_response(client, 200, {"message": "Recording stopped", "track": track})
 
-        elif method == "GET" and path == "/sensor-data":
-            send_response(client, 200, get_sensor_data())
-            
         elif method == "GET" and path == "/get_track":
             send_response(client, 200, {"track": track})
-            
-        elif method == "GET" and path == "/cartography":
-            cyberpi.console.println("cartography")
-            send_response(client, 200, getCartography())
 
         elif method == "POST" and path == "/move":
             try:
@@ -215,6 +152,15 @@ def handle_request(client):
                     elif direction == "right":
                         mbot2.turn_right(speed)
 
+                    if mbuild.ultrasonic2.get(1) < 15:
+                                mbot2.EM_stop("ALL")
+                                mbot2.turn(90)
+                    
+                    if mbuild.quad_rgb_sensor.get_gray("L2",1) < 10 or mbuild.quad_rgb_sensor.get_gray("R2",1) < 10:
+                                mbot2.EM_stop("ALL")
+                                mbot2.straight(-5)
+                                mbot2.turn(90)
+                                
                 send_response(client, 200, {"message": "Movement executed"})
             except (ValueError, KeyError):
                 send_response(client, 400, {"error": "Invalid movement data"})
@@ -223,8 +169,6 @@ def handle_request(client):
             if track:
                 replay_track()
                 send_response(client, 200, {"message": "Replay started"})
-            else:
-                send_response(client, 404, {"error": "No track available for replay"})
 
         elif method == "POST" and path == "/execute_map":
             try:
@@ -234,11 +178,14 @@ def handle_request(client):
                 if not isinstance(steps, list):
                     raise ValueError("Invalid map format")
 
-                execute_stepsmap(steps)
+                execute_steps(steps)
                 send_response(client, 200, {"message": "Map executed successfully"})
             except (ValueError, KeyError):
                 send_response(client, 400, {"error": "Invalid map data"})
-
+                
+        elif method == "GET" and path == "/sensor-data":
+            send_response(client, 200, get_sensor_data())
+    
         elif method == "POST" and path == "/led":
             try:
                 data = ujson.loads(body)

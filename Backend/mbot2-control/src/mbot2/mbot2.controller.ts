@@ -138,10 +138,20 @@ export class Mbot2Controller {
   @Get('sensor-data')
   async getSensorData() {
     try {
-      const data = await this.sensorDataService.getAllSensorData();
-      return { success: true, data };
+      const sensorData = await this.mbotService.getSensorDataFromMbot();
+      if (!sensorData) {
+        throw new HttpException('Keine Sensordaten verfügbar', HttpStatus.NOT_FOUND);
+      }
+      return {
+        success: true,
+        data: sensorData,
+      };
     } catch (error) {
-      throw new HttpException('Fehler beim Abrufen der Sensordaten', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error('Fehler beim Abrufen der Sensordaten:', error.message, error.stack);
+      throw new HttpException(
+        'Fehler beim Abrufen der Sensordaten',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 

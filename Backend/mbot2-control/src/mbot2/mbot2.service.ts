@@ -33,7 +33,7 @@ export class Mbot2Service {
     return await this.sendHttpRequest('POST', 'move', command);
   }
   // Sensordata
-  async getSensorData() {
+  async getSensorDataFromMbot(): Promise<any> {
     return await this.sendHttpRequest('GET', 'sensor-data');
   }
 

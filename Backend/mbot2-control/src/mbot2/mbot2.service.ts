@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Track } from './models/tracks.schema';
 
 // Target Server Configuration
-const TARGET_IP = '10.10.1.28'; // IP of the mBot2 HTTP server
+const TARGET_IP = '10.10.1.18'; // IP of the mBot2 HTTP server
 const GENERAL_PORT = 8080; // Port for all requests
 
 @Injectable()
@@ -12,20 +12,20 @@ export class Mbot2Service {
   private async sendHttpRequest(method: 'POST' | 'GET', endpoint: string, payload: any = null) {
     const url = `http://${TARGET_IP}:${GENERAL_PORT}/${endpoint}`;
     try {
-      let response;
-      if (method === 'POST') {
-        response = await axios.post(url, payload);
-      } else if (method === 'GET') {
-        response = await axios.get(url);
-      } else {
-        throw new Error(`Unsupported HTTP method: ${method}`);
-      }
-      return response.data;
+        let response;
+        if (method === 'POST') {
+            response = await axios.post(url, payload);
+        } else if (method === 'GET') {
+            response = await axios.get(url);
+        } else {
+            throw new Error(`Unsupported HTTP method: ${method}`);
+        }
+        return response.data;
     } catch (error) {
-      console.error('Error sending request:', error.message);
-      return null;
+        console.error('Error sending request:', error.message);
+        return null;
     }
-  }
+}
 
   // Function to send movement command
   async sendMovementCommand(direction: string, speed: number, r: number = 0, g: number = 0, b: number = 0) {

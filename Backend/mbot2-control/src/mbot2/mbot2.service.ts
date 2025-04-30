@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Track } from './models/tracks.schema';
 
 // Target Server Configuration
-const TARGET_IP = '10.10.1.28'; // IP of the mBot2 HTTP server
+const TARGET_IP = '10.10.2.137'; // IP of the mBot2 HTTP server
 const GENERAL_PORT = 8080; // Port for all requests
 
 @Injectable()
@@ -77,6 +77,9 @@ export class Mbot2Service {
     return await this.sendHttpRequest('GET', 'cartography');
   }
 
+  async stopCartography() {
+    return await this.sendHttpRequest('POST', 'stopcartography');
+  }
 
   // Function to control LED
   async setLedColor(r: number, g: number, b: number) {

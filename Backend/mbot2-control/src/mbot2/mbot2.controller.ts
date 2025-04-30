@@ -160,6 +160,11 @@ export class Mbot2Controller {
   return await this.mbotService.getCartography();
 }
 
+@Post('stopcartography')
+async stopCartography() {
+return await this.mbotService.stopCartography();
+}
+
   // Endpoint to control the LED
   @Post('led')
   async setLed(@Body() body: { r: number; g: number; b: number }) {

@@ -142,10 +142,7 @@ export class Mbot2Controller {
       if (!sensorData) {
         throw new HttpException('Keine Sensordaten verfügbar', HttpStatus.NOT_FOUND);
       }
-      return {
-        success: true,
-        data: sensorData,
-      };
+      return sensorData
     } catch (error) {
       console.error('Fehler beim Abrufen der Sensordaten:', error.message, error.stack);
       throw new HttpException(
@@ -167,9 +164,9 @@ return await this.mbotService.stopCartography();
 
   // Endpoint to control the LED
   @Post('led')
-  async setLed(@Body() body: { r: number; g: number; b: number }) {
-    const { r, g, b } = body;
-    return await this.mbotService.setLedColor(r, g, b);
+  async setLed(@Body() body: { R: number; G: number; B: number }) {
+    const { R, G, B } = body;
+    return await this.mbotService.setLedColor(R, G, B);
   }
 
   // Endpoint to execute a predefined map of movements

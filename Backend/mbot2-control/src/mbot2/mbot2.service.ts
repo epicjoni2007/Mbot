@@ -77,6 +77,10 @@ export class Mbot2Service {
     return await this.sendHttpRequest('GET', 'cartography');
   }
 
+  async getCartographyData(): Promise<any> {
+    return await this.sendHttpRequest('GET', 'cartography-data');
+ }
+
   async stopCartography() {
     return await this.sendHttpRequest('POST', 'stopcartography');
   }

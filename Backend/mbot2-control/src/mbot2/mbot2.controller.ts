@@ -161,6 +161,19 @@ export class Mbot2Controller {
 async stopCartography() {
 return await this.mbotService.stopCartography();
 }
+@Get('cartography-data')
+async getCartographyData() {
+    try {
+        const data = await this.mbotService.getCartographyData();
+        if (!data) {
+            throw new HttpException('Keine Kartographiedaten verfügbar', 404);
+        }
+        return { map_points: data };
+    } catch (error) {
+        console.error('Fehler beim Abrufen der Kartographiedaten:', error.message);
+        throw new HttpException('Fehler beim Abrufen der Kartographiedaten', 500);
+    }
+}
 
   // Endpoint to control the LED
   @Post('led')

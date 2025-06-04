@@ -30,27 +30,35 @@ export class Mbot2Controller {
   }
 
   // Endpoint to stop recording
-  @Post('stop-recording')
-  async stopRecording() {
+ @Post('stop-recording')
+async stopRecording() {
+  try {
+    // Fordere die Track-Daten direkt vom mBot an
+    const response = await this.mbotService.stopRecording();
+    // response.track enthält das Array aus dem mBot-Projekt
+    if (response && Array.isArray(response.track) && response.track.length > 0) {
+      return {
+        track: response.track, // <-- direkt vom mBot!
+      };
+    } else {
+      throw new Error('Keine Track-Daten vom mBot verfügbar');
+    }
+  } catch (error) {
+    console.error('Fehler beim Stoppen der Aufnahme:', error.message, error.stack);
+    throw new HttpException('Fehler beim Stoppen der Aufnahme', HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+}
+
+  @Post('replay')
+  async replayMap(@Body() body: { map: { direction: string, speed: number, duration: number, rotation?: number }[] }) {
     try {
-      const response = await this.mbotService.stopRecording(); // Track-Daten abrufen
-      const trackData = response.track[0]; // Extrahiere die Track-Daten aus dem Array
-      if (trackData) {
-        const savedTrack = await this.trackService.saveTrackWithId(trackData); // Track speichern
-        return {
-          success: true,
-          message: 'Recording gestoppt und Track gespeichert.',
-          data: savedTrack,
-        };
-      } else {
-        throw new Error('Keine Track-Daten verfügbar');
-      }
+      const result = await this.mbotService.replayMap(body.map);
+      return {
+        data: result,
+      };
     } catch (error) {
-      console.error('Fehler beim Stoppen der Aufnahme:', error.message, error.stack);
-      throw new HttpException(
-        'Fehler beim Stoppen der Aufnahme oder Speichern des Tracks',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      console.error('Fehler beim Replay der Map:', error.message, error.stack);
+      throw new HttpException('Fehler beim Replay der Map', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 

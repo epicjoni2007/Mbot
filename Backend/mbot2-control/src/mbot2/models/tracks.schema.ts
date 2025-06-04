@@ -1,20 +1,13 @@
-import { Schema, Document } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document, Types } from 'mongoose';
+import { MovementAction } from './movementaction.schema';
 
-export interface Track {
-  id: string; // Eindeutige ID
-  duration: number; // Dauer des Tracks in Sekunden
-  direction: string; // Richtung des Tracks (z. B. "N", "S", "E", "W")
-  speed: number; // Geschwindigkeit des Tracks
-  timestamp?: Date; // Optionaler Zeitstempel
-}
-
-// Kombiniere das Track-Interface mit Mongoose's Document
 export type TrackDocument = Track & Document;
 
-export const TrackSchema = new Schema<TrackDocument>({
-  id: { type: String, required: true, unique: true }, // Eindeutige ID
-  duration: { type: Number, required: true }, // Dauer
-  direction: { type: String, required: true }, // Richtung
-  speed: { type: Number, required: true }, // Geschwindigkeit
-  timestamp: { type: Date, default: Date.now }, // Optionaler Zeitstempel mit Standardwert
-});
+@Schema({ timestamps: true })
+export class Track {
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'MovementAction' }] })
+  actions: Types.ObjectId[];
+}
+
+export const TrackSchema = SchemaFactory.createForClass(Track);

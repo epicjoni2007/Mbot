@@ -3,13 +3,13 @@ import axios from 'axios';
 import { Track } from './models/tracks.schema';
 
 // Target Server Configuration
-const TARGET_IP = '10.10.1.18'; // IP of the mBot2 HTTP server
+const TARGET_IP = '10.10.1.28'; // IP of the mBot2 HTTP server
 const GENERAL_PORT = 8080; // Port for all requests
 
 @Injectable()
 export class Mbot2Service {
   // Function to send HTTP requests
-  private async sendHttpRequest(method: 'POST' | 'GET', endpoint: string, payload: any = null) {
+  public async sendHttpRequest(method: 'POST' | 'GET', endpoint: string, payload: any = null) {
     const url = `http://${TARGET_IP}:${GENERAL_PORT}/${endpoint}`;
     try {
       let response;
@@ -45,16 +45,7 @@ export class Mbot2Service {
   // Function to stop recording
   async stopRecording(): Promise<any> {
     // Simuliere Track-Daten
-    return {
-      message: 'Recording stopped',
-      track: [
-        {
-          duration: 3895,
-          direction: 'forward',
-          speed: 10,
-        },
-      ],
-    };
+   return await this.sendHttpRequest('POST', 'stop_recording');
   }
 
   // Function to replay track
@@ -68,6 +59,10 @@ export class Mbot2Service {
     return await this.sendHttpRequest('POST', 'replay');
   }
 
+  async replayMap(map: { direction: string, speed: number, duration: number, rotation?: number }[]): Promise<any> {
+    // Sende die Map-Daten an den mBot (z.B. an den Endpunkt 'replay_map')
+    return await this.sendHttpRequest('POST', 'replay');
+  }
   // Function to get track
   async getTrack() {
     return await this.sendHttpRequest('GET', 'get_track');

@@ -12,7 +12,7 @@ const ColorfulPicker = ({ setNewColors }) => {
     const b = parseInt(color.slice(5, 7), 16)
     setNewColors({ R: r, G: g, B: b })
   }
-
+  
   return (
     <HexColorPicker className="customcolorpicker" color={color} onChange={handleColorChange} />
   )

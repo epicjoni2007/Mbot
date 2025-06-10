@@ -16,12 +16,6 @@
     justify-content: space-around;
 }
 
-@media (orientation: portrait) {
-    #sensorwerte {
-        font-size: 1vh;
-    }
-}
-
 #sensorwerte i {
     margin-left: 2.5px;
 }
@@ -40,12 +34,6 @@
     display: flex;
     justify-content: center;
     text-align: center;
-}
-
-@media (orientation: portrait) {
-    #layouttext {
-        font-size: 3vh;
-    }
 }
 
 #layoutsettings {
@@ -108,13 +96,6 @@
     text-align: center;
 }
 
-@media (orientation: portrait) {
-    .layoutlink {
-        width: 80%;
-        font-size: 2vh;
-    }
-}
-
 .layoutlink.selected {
     background-color: #BAC3CD;
 }
@@ -156,12 +137,6 @@
     justify-content: space-between;
 }
 
-@media (orientation: portrait) {
-    #modal-content-layout {
-        width: 80%;
-    }
-}
-
 #contentcontainer {
     display: flex;
     width: 75%;
@@ -176,12 +151,6 @@
     display: flex;
     flex-direction: column;
     text-align: center;
-}
-
-@media (orientation: portrait) {
-    #sidebarsettings {
-        width: 20vw;
-    }
 }
 
 .settingmenuitem {
@@ -214,11 +183,6 @@
     width: 100%;
 }
 
-/* #opensettingstab {
-    height: 100%;
-    width: 100%;
-} */
-
 #settingsright {
     display: flex;
     flex-direction: column;
@@ -239,6 +203,7 @@
     border-radius: 3vh;
     width: 100%;
     background-color: #BAC3CD;
+    height: 65vh;
 }
 
 @media (orientation: portrait) {
@@ -246,6 +211,33 @@
         margin: 2.5vh;
         padding: 2.5vh;
         width: 100%;
+        max-width: 73%;
+        max-height: 75vh;
+    }
+    
+    #savebutton {
+        width: 15vw;
+    }
+
+    .layoutlink {
+        width: 80%;
+        font-size: 2vh;
+    }
+
+    #layouttext {
+        font-size: 3vh;
+    }
+
+    #sensorwerte {
+        font-size: 13px;
+    }
+
+    #modal-content-layout {
+        width: 80%;
+    }
+
+    #sidebarsettings {
+        width: 20vw;
     }
 }
 
@@ -275,10 +267,4 @@
     background-color: black;
     box-shadow: 5px;
     color: white;
-}
-
-@media (orientation: portrait) {
-    #savebutton {
-        width: 15vw;
-    }
 }

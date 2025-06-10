@@ -54,19 +54,18 @@
     border: 1px solid #BAC3CD;
 }
 
-#confirmbutton {
-    border: none;
-    cursor: pointer;
-    border-radius: 10px;
-    margin: 15px 0 0 0;
-    padding: 0;
-    width: 10vw;
-    height: 7.5vh;
-    font-size: 3vh;
-    color: white;
-    background-color: rgba(28, 40, 51, 1);
+form #confirmbutton {
+    border: none !important;
+    cursor: pointer !important;
+    border-radius: 10px !important;
+    margin: 15px 0 0 0 !important;
+    padding: 0 !important;
+    width: 10vw !important;
+    height: 7.5vh !important;
+    font-size: 3vh !important;
+    color: white !important;
+    background-color: rgba(28, 40, 51, 1) !important;
 }
-
 #errormessage {
     margin: 0;
     color: #ef4444;
@@ -85,7 +84,7 @@
         width: 50vw;
     }
 
-    #confirmbutton {
-        width: 50vw;
+    form #confirmbutton {
+        width: 50vw !important;
     }
 }

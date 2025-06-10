@@ -1,0 +1,69 @@
+#karte {
+    height: 65vh;
+    display: flex;
+    justify-content: space-between;
+}
+
+@media (orientation: portrait) {
+    #karte {
+        flex-direction: column;
+    }
+
+    .buttons {
+        flex-direction: row !important;
+        gap: 1vh;
+        align-items: center !important;
+        margin-bottom: 2vh;
+        margin-left: 0 !important;
+    }
+
+    .buttonCard {
+        width: 20vh !important;
+        height: 5vh !important;
+    }
+
+    .svgContainer {
+        width: 100% !important;
+    }
+}
+
+.svgContainer {
+    width: 50%;
+    height: 100%;
+    border: 1px solid #ccc;
+    overflow: auto;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2vh;
+    margin-left: 20px;
+}
+
+.buttonCard{
+    border: 0;
+    cursor: pointer;
+    background-color: rgba(28, 40, 51, 1);
+    color: #98A2AD;
+    width: 15vw;
+    height: 60px;
+    padding: 10px;
+    border-radius: 2vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease-in-out;
+    font-size: 20px;
+}
+
+.buttonCard:hover {
+    background-color: black;
+    box-shadow: 5px;
+    color: white;
+}
+
+.buttonCard:disabled {
+    opacity: 0.6;
+}

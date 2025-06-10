@@ -3,20 +3,20 @@ import "../css/Home.css"
 import icon from "/main-icon.png"
 
 const Home = (props) => {
-    const[BetrWeg, setBetrWeg] = useState([])
+    const[BetrWeg, setBetrWeg] = useState([null, null])
 
     useEffect(() => {
-        fetch('http://' + props.IpName[0] + ':3000/daten')
-        .then(response => response.json())
-        .then(data => setBetrWeg([
-            data.betriebsDauer,
-            data.wegStrecke
-        ]))
-        return
+        const interval = setInterval(() => {
+            const storedData = JSON.parse(localStorage.getItem('sensorData'))
+            setBetrWeg([0, storedData.timer])
+        }, 1000)
+
+        return () => clearInterval(interval)
       }, [])
 
     return(
         <div id="home">
+            {console.log("test: " + BetrWeg)}
             <div id="datatabs">
                 <div className="datatab">
                     <div className="datatabtext">

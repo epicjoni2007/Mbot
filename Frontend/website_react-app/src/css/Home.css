@@ -3,6 +3,7 @@
     height: 100%;
     display: flex;
     justify-content: space-between;
+    overflow: hidden;
 }
 
 #homemainicon {
@@ -13,6 +14,10 @@
 @media (orientation: portrait) {
     #homemainicon {
         display: none;
+    }
+
+    .datatab {
+        max-height: 40%;
     }
 }
 
@@ -32,12 +37,6 @@
     border-radius: 30px;
     display: flex;
     flex-direction: column;
-}
-
-@media (orientation: portrait) {
-    .datatab {
-        max-height: 40%;
-    }
 }
 
 .datatabtext {

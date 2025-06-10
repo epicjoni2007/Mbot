@@ -1,0 +1,112 @@
+#routedefine {
+    gap: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    width: 85vw;
+    height: 65vh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.leftroute {
+    height: 65vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.rightroute {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-right: 20px;
+}
+
+.drivebutton {
+    cursor: pointer;
+    background-color: rgba(28, 40, 51, 1);
+    color: #98A2AD;
+    width: 15vw;
+    margin-top: 12vh;
+    padding: 10px 0 10px 0;
+    border-radius: 2vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease-in-out;
+}
+
+.drivebutton:hover {
+    background-color: black;
+    box-shadow: 5px;
+    color: white;
+}
+
+.routeslider {
+  -webkit-appearance: none;
+  margin-top: 30px;
+  width: 100%;
+  height: 6px;
+  background: rgb(124, 130, 134);
+  border-radius: 5px;
+  opacity: 0.9;
+  transition: opacity 0.2s;
+}
+
+.routeslider:hover {
+  opacity: 1;
+}
+
+.routeslider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 32px;
+  background: rgba(44, 83, 100, 1);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.routeslider::-moz-range-thumb {
+  width: 16px;
+  height: 32px;
+  background: rgba(44, 83, 100, 1);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+canvas {
+  border-radius: 12px;
+}
+
+@media (orientation: portrait) {
+    .routeslider {
+        width: 70vw;
+    }
+
+    .leftroute {
+        height: 50%;
+    }
+
+    .rightroute {
+        margin: 0;
+    }
+
+    .drivebutton {
+        width: 60vw;
+        margin-top: 7vh;
+    }
+
+    #routedefine {
+        width: auto;
+    }
+
+    .routeslider {
+        width: 88%;
+    }
+}
+

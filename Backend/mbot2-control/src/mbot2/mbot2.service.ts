@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Track } from './models/tracks.schema';
 
 // Target Server Configuration
-const TARGET_IP = '10.10.1.28'; // IP of the mBot2 HTTP server
+const TARGET_IP = '10.10.1.217'; // IP of the mBot2 HTTP server
 const GENERAL_PORT = 8080; // Port for all requests
 
 @Injectable()

@@ -1,6 +1,4 @@
-Hier ist eine kompakte, professionelle **README.md** für euer GitHub-Repository des *mBot2-Projekts* — auf Deutsch, mit klarer Struktur, Badges und Entwicklerfreundlichem Stil:
 
----
 
 # 🤖 mBot2-Projekt
 
@@ -134,58 +132,7 @@ npm run start
   * mBot-Code ~5 MB
 * **Technologien:** NestJS, MongoDB, MicroPython, UDP
 
----
 
-## 📅 Projektverlauf (Scrum)
-
-| Sprint | Zeitraum      | Fokus                          | Velocity |
-| ------ | ------------- | ------------------------------ | -------- |
-| 1      | 23.01 – 06.02 | Basis-API & Kommunikation      | 61       |
-| 2      | 07.02 – 27.02 | API & Tracks                   | 60       |
-| 3      | 17.03 – 09.04 | Datenbank & Sensorverarbeitung | 70       |
-| 4      | 30.04 – 14.05 | Kartografie & MultiConnection  | 40       |
-| 5      | 21.05 – 04.06 | Abschluss, Doku & Bugfixes     | 40       |
-
-**Ø Velocity:** 59 SP/Sprint
-**Status:** ✅ *Projekt abgeschlossen (v1.6, 10.06.2025)*
-
----
-
-## 📚 Learnings & Fazit
-
-**Was lief gut:**
-
-* Saubere Teamkommunikation und funktionierendes Scrum-Setup
-* Robustes API-Design und stabile Datenbankintegration
-
-**Herausforderungen:**
-
-* Ungenaue Bewegungssteuerung durch Hardware-Limitationen
-* CORS-Fehler & UDP-Verbindungsabbrüche
-
-**Lessons Learned:**
-
-* Frühzeitiges Testen ist entscheidend
-* Automatisierte Tests und Logging stark empfohlen für Folgeprojekte
-
----
-
-## 🧩 Verwendete Software
-
-| Tool               | Version | Funktion            |
-| ------------------ | ------- | ------------------- |
-| Visual Studio Code | 1.100.2 | Entwicklung         |
-| MongoDB Compass    | 8.0.9   | DB-Verwaltung       |
-| Postman            | 11.46.4 | API-Tests           |
-| GitHub             | Online  | Versionskontrolle   |
-| mBlock             | 5.6     | mBot-Programmierung |
-
----
-
-## 📄 Lizenz
-
-Dieses Projekt wurde im Rahmen des Unterrichts an der **HTL Saalfelden** entwickelt.
-Verwendung und Weitergabe nur zu schulischen und nicht-kommerziellen Zwecken.
 
 © 2025 Backend 3 – *Hafner, Ellmauthaler, Eder*
 
